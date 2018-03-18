@@ -1,0 +1,50 @@
+@startuml
+DomainModelTest -> PersistenceManager: setUpPersistence()
+activate DomainModelTest
+activate PersistenceManager
+deactivate PersistenceManager
+
+DomainModelTest -> Product: populateProducts()
+activate Product
+deactivate Product
+
+DomainModelTest -> PersistenceManager: persistProducts()
+activate PersistenceManager
+
+PersistenceManager -> Persistence: persist()
+activate Persistence
+deactivate Persistence
+deactivate PersistenceManager
+
+DomainModelTest -> Product: findProduct(class, name)
+activate Product
+
+Product -> Contract: createContract(Product, Amount, whenSigned)
+deactivate Product
+activate Contract
+
+
+Contract -> RecognitionStrategy: getRecognitionStrategy(Contract)
+deactivate Contract
+
+activate RecognitionStrategy
+
+
+RecognitionStrategy -> RevenueRecognition: calculateRevenueRecognitions(contract)
+
+
+activate RevenueRecognition
+deactivate RevenueRecognition
+deactivate RecognitionStrategy
+DomainModelTest -> PersistenceManager: persistRevenueRecognition()
+activate PersistenceManager
+
+PersistenceManager -> Persistence: persist()
+
+activate Persistence
+deactivate Persistence
+deactivate PersistenceManager
+deactivate DomainModelTest
+
+
+@enduml
